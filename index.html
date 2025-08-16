@@ -9,23 +9,77 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .option-button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #818cf8; }
-        .option-button:disabled { opacity: 0.7; cursor: not-allowed; }
-        .correct { background-color: #22c55e !important; color: white !important; border-color: #16a34a !important; }
-        .correct .option-letter { background-color: white !important; color: #16a34a !important; }
-        .incorrect { background-color: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
-        .incorrect .option-letter { background-color: white !important; color: #dc2626 !important; }
-        .spinner { border: 4px solid rgba(255, 255, 255, 0.1); width: 36px; height: 36px; border-radius: 50%; border-left-color: #818cf8; animation: spin 1s ease infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .option-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: #818cf8; /* indigo-400 */
+        }
+        .option-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .correct {
+            background-color: #22c55e !important; /* green-500 */
+            color: white !important;
+            border-color: #16a34a !important; /* green-600 */
+        }
+        .correct .option-letter {
+            background-color: white !important;
+            color: #16a34a !important;
+        }
+        .incorrect {
+            background-color: #ef4444 !important; /* red-500 */
+            color: white !important;
+            border-color: #dc2626 !important; /* red-600 */
+        }
+        .incorrect .option-letter {
+            background-color: white !important;
+            color: #dc2626 !important;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #818cf8; /* indigo-400 */
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-200 flex items-center justify-center min-h-screen p-4">
 
     <div id="app-container" class="w-full max-w-2xl mx-auto bg-slate-800 rounded-2xl shadow-xl p-6 sm:p-8 transition-all duration-500 relative">
 
+        <!-- Botão de Logout/Esquecer Chave -->
+        <button id="logout-btn" class="hidden absolute top-4 right-4 text-xs text-slate-400 hover:text-indigo-400 hover:underline">Esquecer Chave</button>
+
+        <!-- Tela de Login/Configuração de API -->
+        <div id="login-screen" class="hidden">
+            <div class="text-center">
+                <h1 class="text-3xl sm:text-4xl font-bold text-indigo-400">Configuração Inicial</h1>
+                <p class="mt-3 text-slate-400">Olá, Ysraelly! Eu sou a Veruska, sua tutora acadêmica de IA. Para começarmos, por favor, insira sua chave de API do Google AI. Você só precisará fazer isso uma vez.</p>
+            </div>
+            <div class="mt-8 space-y-4">
+                <div>
+                    <label for="api-key-input" class="block text-sm font-medium text-slate-300 mb-1">Sua Chave de API</label>
+                    <input type="password" id="api-key-input" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Cole sua chave de API aqui">
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-xs text-indigo-400 hover:underline">Não tem uma chave? Obtenha uma aqui.</a>
+                </div>
+                <button id="save-key-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-500 transition-colors duration-300 shadow-md">
+                    Salvar e Começar
+                </button>
+            </div>
+        </div>
+
         <!-- Tela Inicial do Quiz -->
-        <div id="start-screen">
+        <div id="start-screen" class="hidden">
             <div class="text-center">
                 <h1 class="text-3xl sm:text-4xl font-bold text-indigo-400">Veruska, sua Geradora de Quizzes</h1>
                 <p class="mt-3 text-slate-400">Olá, Ysraelly! Sou a Veruska. Qual tópico você gostaria de estudar hoje?</p>
@@ -60,11 +114,17 @@
             </div>
             <div class="bg-slate-900/50 p-6 rounded-lg border border-slate-700">
                 <p id="question-text" class="text-lg font-semibold mb-6 min-h-[6rem] text-slate-100"></p>
-                <div id="options-container" class="grid grid-cols-1 gap-4"></div>
+                <div id="options-container" class="grid grid-cols-1 gap-4">
+                    <!-- Opções serão inseridas aqui pelo JavaScript -->
+                </div>
             </div>
-            <div id="feedback-area" class="mt-4 min-h-[6rem]"></div>
+            <div id="feedback-area" class="mt-4 min-h-[6rem]">
+                <!-- Feedback será inserido aqui -->
+            </div>
             <div class="mt-4 flex justify-end">
-                <button id="next-btn" class="hidden bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-500 transition-colors duration-300">Próxima</button>
+                <button id="next-btn" class="hidden bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-500 transition-colors duration-300">
+                    Próxima
+                </button>
             </div>
         </div>
         
@@ -73,6 +133,7 @@
             <h2 class="text-3xl font-bold text-indigo-400">Quiz Finalizado!</h2>
             <p class="mt-4 text-lg text-slate-300">Seu resultado final foi:</p>
             <p id="final-score" class="text-5xl font-bold my-4 text-white"></p>
+            
             <div id="analysis-container" class="mt-8 text-left">
                 <div id="analysis-loading" class="text-center">
                     <div class="spinner mx-auto"></div>
@@ -80,47 +141,99 @@
                 </div>
                 <div id="analysis-result" class="hidden">
                     <h3 class="text-2xl font-bold text-slate-100 mb-4 text-center">Análise Pedagógica</h3>
+                    <!-- Conteúdo da análise será inserido aqui -->
                 </div>
             </div>
-            <button id="restart-btn" class="mt-8 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-500 transition-colors duration-300 shadow-md">Estudar outro tópico</button>
+
+            <button id="restart-btn" class="mt-8 bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-500 transition-colors duration-300 shadow-md">
+                Estudar outro tópico
+            </button>
         </div>
+
     </div>
 
     <script type="module">
-        // --- CONFIGURAÇÃO ---
-        // Cole o link do seu serviço do Render aqui
-        const API_BASE_URL = "https://veruska-api.onrender.com"; 
-        
-        // --- Referências ao DOM ---
+        // --- Referências aos Elementos do DOM ---
+        const loginScreen = document.getElementById('login-screen');
         const startScreen = document.getElementById('start-screen');
         const loadingScreen = document.getElementById('loading-screen');
         const quizScreen = document.getElementById('quiz-screen');
         const finalScreen = document.getElementById('final-screen');
+
+        const apiKeyInput = document.getElementById('api-key-input');
+        const saveKeyBtn = document.getElementById('save-key-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
         const topicInput = document.getElementById('topic-input');
         const questionsCountInput = document.getElementById('questions-count');
         const startBtn = document.getElementById('start-btn');
         const loadingTopic = document.getElementById('loading-topic');
+        
         const quizTopic = document.getElementById('quiz-topic');
         const progressText = document.getElementById('progress-text');
         const questionText = document.getElementById('question-text');
         const optionsContainer = document.getElementById('options-container');
         const feedbackArea = document.getElementById('feedback-area');
         const nextBtn = document.getElementById('next-btn');
+        
         const finalScore = document.getElementById('final-score');
         const restartBtn = document.getElementById('restart-btn');
+        const analysisContainer = document.getElementById('analysis-container');
         const analysisLoading = document.getElementById('analysis-loading');
         const analysisResult = document.getElementById('analysis-result');
+
 
         // --- Estado da Aplicação ---
         let quizData = [];
         let userResults = [];
         let currentQuestionIndex = 0;
         let score = 0;
+        let userApiKey = '';
 
         // --- Lógica Principal ---
+        document.addEventListener('DOMContentLoaded', checkLogin);
+        saveKeyBtn.addEventListener('click', saveApiKey);
+        logoutBtn.addEventListener('click', logout);
         startBtn.addEventListener('click', handleStartQuiz);
         nextBtn.addEventListener('click', showNextQuestion);
         restartBtn.addEventListener('click', restartQuiz);
+
+        function checkLogin() {
+            userApiKey = localStorage.getItem('geminiQuizApiKey');
+            if (userApiKey) {
+                loginScreen.classList.add('hidden');
+                startScreen.classList.remove('hidden');
+                logoutBtn.classList.remove('hidden');
+            } else {
+                loginScreen.classList.remove('hidden');
+                startScreen.classList.add('hidden');
+                logoutBtn.classList.add('hidden');
+            }
+        }
+
+        function saveApiKey() {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                localStorage.setItem('geminiQuizApiKey', key);
+                checkLogin();
+            } else {
+                alert('Por favor, insira uma chave de API válida.');
+            }
+        }
+
+        function logout() {
+            if (confirm('Você tem certeza que deseja esquecer sua chave de API? Você precisará inseri-la novamente.')) {
+                localStorage.removeItem('geminiQuizApiKey');
+                userApiKey = '';
+                // Esconde todas as telas e mostra a de login
+                startScreen.classList.add('hidden');
+                quizScreen.classList.add('hidden');
+                finalScreen.classList.add('hidden');
+                loadingScreen.classList.add('hidden');
+                loginScreen.classList.remove('hidden');
+                logoutBtn.classList.add('hidden');
+            }
+        }
 
         async function handleStartQuiz() {
             const topic = topicInput.value.trim();
@@ -129,41 +242,59 @@
                 alert("Por favor, insira um tópico para estudar.");
                 return;
             }
-            if (!API_BASE_URL || API_BASE_URL === "COLE_O_SEU_LINK_DO_RENDER_AQUI") {
-                alert("Erro de configuração: O endereço da API não foi definido no código.");
-                return;
-            }
             
-            showScreen('loading');
+            startScreen.classList.add('hidden');
             loadingTopic.textContent = topic;
+            loadingScreen.classList.remove('hidden');
 
             try {
-                const response = await fetch(`${API_BASE_URL}/generate-quiz`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ topic: topic, count: questionsCount })
-                });
-
-                if (!response.ok) throw new Error(`Erro na API: ${response.statusText}`);
-                
-                const data = await response.json();
-                if (data.quiz && data.quiz.length > 0) {
-                    quizData = data.quiz;
+                const generatedQuiz = await generateQuizWithGemini(topic, questionsCount);
+                if (generatedQuiz && generatedQuiz.length > 0) {
+                    quizData = generatedQuiz;
                     currentQuestionIndex = 0;
                     score = 0;
                     userResults = [];
                     
+                    loadingScreen.classList.add('hidden');
                     quizTopic.textContent = topic;
-                    showScreen('quiz');
+                    quizScreen.classList.remove('hidden');
+                    
                     displayQuestion();
                 } else {
                     throw new Error("A API não retornou um quiz válido.");
                 }
             } catch (error) {
                 console.error("Erro ao gerar o quiz:", error);
-                alert("Desculpe, ocorreu um erro ao gerar o quiz. Por favor, tente novamente.");
-                showScreen('start');
+                alert("Desculpe, ocorreu um erro ao gerar o quiz. Verifique sua chave de API e tente novamente.");
+                restartQuiz();
             }
+        }
+        
+        async function generateQuizWithGemini(topic, count) {
+            const prompt = `Gere um quiz interativo com ${count} questões sobre o tópico "${topic}". O público-alvo é uma aluna de ensino médio inteligente. A dificuldade das questões deve ser cuidadosamente calibrada: em uma escala de 0 (muito fácil) a 10 (muito difícil), as questões devem variar entre os níveis 6 e 9. As questões devem simular uma atividade de aula real para o ensino médio. Isso significa que:
+- Para tópicos de exatas (como Matemática ou Física), as questões devem apresentar um problema que exija cálculo para chegar à resposta. A resposta não deve ser óbvia sem o cálculo.
+- Para tópicos de humanas (como História ou Geografia), as questões devem cobrar conhecimento aprofundado do conteúdo, exigindo análise de contextos, causas e consequências, não apenas a memorização de datas ou nomes.
+- Para tópicos de biológicas (como Biologia ou Química), as questões devem focar na compreensão de processos e estruturas.
+- IMPORTANTE: Se uma questão pedir para analisar um "trecho destacado" ou "termo em destaque", você DEVE colocar esse trecho entre dois asteriscos duplos (por exemplo: No trecho "O menino **correu** para casa", qual a função do verbo?).
+As questões devem ser desafiadoras, mas realistas. Cada questão deve ter 4 opções, sendo apenas uma correta. As opções incorretas devem ser erros conceituais sofisticados e plausíveis. Forneça uma explicação um pouco mais detalhada, mas ainda concisa, que aprofunde o conceito e, se possível, explique brevemente por que as alternativas incorretas são erradas.`;
+            
+            const result = await callGeminiAPI(prompt, {
+                quiz: {
+                    type: "ARRAY",
+                    description: "Uma lista de questões para o quiz.",
+                    items: {
+                        type: "OBJECT",
+                        properties: {
+                            pergunta: { type: "STRING" },
+                            opcoes: { type: "ARRAY", items: { type: "STRING" } },
+                            respostaCorreta: { type: "STRING" },
+                            explicacao: { type: "STRING" }
+                        },
+                        required: ["pergunta", "opcoes", "respostaCorreta", "explicacao"]
+                    }
+                }
+            });
+            return result ? result.quiz : null;
         }
         
         function displayQuestion() {
@@ -172,7 +303,10 @@
             
             const currentQuestion = quizData[currentQuestionIndex];
             progressText.textContent = `Questão ${currentQuestionIndex + 1} de ${quizData.length}`;
-            questionText.textContent = currentQuestion.pergunta;
+            
+            // Converte Markdown (**) para HTML (<strong>) para destacar o texto
+            const formattedQuestion = currentQuestion.pergunta.replace(/\*\*(.*?)\*\*/g, '<strong class="text-indigo-300 font-semibold">$1</strong>');
+            questionText.innerHTML = formattedQuestion;
             
             optionsContainer.innerHTML = '';
             const letters = ['A', 'B', 'C', 'D'];
@@ -226,8 +360,8 @@
         }
         
         async function showFinalResults() {
-            showScreen('final');
-            analysisResult.innerHTML = ''; // Limpa análise anterior
+            quizScreen.classList.add('hidden');
+            finalScreen.classList.remove('hidden');
             analysisResult.classList.add('hidden');
             analysisLoading.classList.remove('hidden');
             
@@ -235,15 +369,8 @@
             finalScore.textContent = `${percentage}%`;
             
             try {
-                const response = await fetch(`${API_BASE_URL}/analyze-performance`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ topic: quizTopic.textContent, results: userResults })
-                });
-                if (!response.ok) throw new Error('Erro na API de análise.');
-
-                const analysisData = await response.json();
-                displayAnalysis(analysisData);
+                const analysis = await generatePerformanceAnalysis();
+                displayAnalysis(analysis);
             } catch (error) {
                 console.error("Erro ao gerar análise:", error);
                 analysisResult.innerHTML = `<p class="text-center text-red-400">Não foi possível gerar a análise de desempenho.</p>`;
@@ -253,13 +380,50 @@
             }
         }
 
+        async function generatePerformanceAnalysis() {
+            const resultsText = userResults.map((res, i) => 
+                `Questão ${i+1}: "${res.pergunta}"\nResposta dada: "${res.respostaDada}"\nResposta correta: "${res.respostaCorreta}"\nResultado: ${res.acertou ? 'Acerto' : 'Erro'}`
+            ).join('\n\n');
+
+            const prompt = `A aluna Ysraelly completou um quiz sobre "${topicInput.value}". Abaixo estão os resultados dela. Analise CADA ERRO, identificando o tópico específico da pergunta e a causa provável do erro (ex: falta de conhecimento fundamental, confusão entre conceitos similares, erro de cálculo, memorização incorreta de fórmula, etc.). Com base nos erros, forneça um resumo diagnóstico dos pontos que ela mais precisa reforçar. Seja encorajador e didático.
+
+Resultados do Quiz:
+${resultsText}
+`;
+            
+            return callGeminiAPI(prompt, {
+                analise: {
+                    type: "OBJECT",
+                    properties: {
+                        diagnosticoGeral: { type: "STRING" },
+                        analiseDosErros: {
+                            type: "ARRAY",
+                            items: {
+                                type: "OBJECT",
+                                properties: {
+                                    pergunta: { type: "STRING" },
+                                    causaProvavel: { type: "STRING" },
+                                    recomendacao: { type: "STRING" }
+                                },
+                                required: ["pergunta", "causaProvavel", "recomendacao"]
+                            }
+                        }
+                    },
+                    required: ["diagnosticoGeral", "analiseDosErros"]
+                }
+            });
+        }
+
         function displayAnalysis(analysisData) {
-             if (!analysisData || !analysisData.analise) {
+            if (!analysisData || !analysisData.analise) {
                 analysisResult.innerHTML = `<p class="text-center text-slate-400">Não foi possível gerar uma análise detalhada.</p>`;
                 return;
             }
+
             const { diagnosticoGeral, analiseDosErros } = analysisData.analise;
+            
             let html = `<div class="bg-indigo-500/10 border border-indigo-500/30 p-4 rounded-lg mb-6"><p class="font-semibold text-indigo-300">Diagnóstico Geral</p><p class="text-indigo-400">${diagnosticoGeral}</p></div>`;
+
             if (analiseDosErros && analiseDosErros.length > 0) {
                 html += `<h4 class="text-xl font-bold text-slate-200 mb-3">Análise dos Erros:</h4><div class="space-y-4">`;
                 analiseDosErros.forEach(erro => {
@@ -273,17 +437,52 @@
             } else {
                 html += `<p class="text-center text-green-400 font-semibold">Parabéns, você não cometeu erros!</p>`;
             }
+
             analysisResult.innerHTML = html;
         }
 
         function restartQuiz() {
-            showScreen('start');
+            finalScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden');
+            loadingScreen.classList.add('hidden');
+            // Volta para a tela principal, pois a chave ainda está salva
+            checkLogin();
         }
 
-        function showScreen(screenName) {
-            [startScreen, loadingScreen, quizScreen, finalScreen].forEach(s => s.classList.add('hidden'));
-            document.getElementById(`${screenName}-screen`).classList.remove('hidden');
+        async function callGeminiAPI(prompt, schemaProperties) {
+            const payload = {
+              contents: [{ role: "user", parts: [{ text: prompt }] }],
+              generationConfig: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                  type: "OBJECT",
+                  properties: schemaProperties
+                }
+              }
+            };
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${userApiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            
+            if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts[0].text) {
+                return JSON.parse(result.candidates[0].content.parts[0].text);
+            } else {
+                console.error("Estrutura da resposta da API inesperada:", result);
+                return null;
+            }
         }
+
     </script>
 </body>
 </html>

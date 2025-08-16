@@ -271,12 +271,21 @@
         }
         
         async function generateQuizWithGemini(topic, count) {
-            const prompt = `Gere um quiz interativo com ${count} questões sobre o tópico "${topic}". O público-alvo é uma aluna de ensino médio inteligente. A dificuldade das questões deve ser cuidadosamente calibrada: em uma escala de 0 (muito fácil) a 10 (muito difícil), as questões devem variar entre os níveis 6 e 9. As questões devem simular uma atividade de aula real para o ensino médio. Isso significa que:
-- Para tópicos de exatas (como Matemática ou Física), as questões devem apresentar um problema que exija cálculo para chegar à resposta. A resposta não deve ser óbvia sem o cálculo.
-- Para tópicos de humanas (como História ou Geografia), as questões devem cobrar conhecimento aprofundado do conteúdo, exigindo análise de contextos, causas e consequências, não apenas a memorização de datas ou nomes.
-- Para tópicos de biológicas (como Biologia ou Química), as questões devem focar na compreensão de processos e estruturas.
-- IMPORTANTE: Se uma questão pedir para analisar um "trecho destacado" ou "termo em destaque", você DEVE colocar esse trecho entre dois asteriscos duplos (por exemplo: No trecho "O menino **correu** para casa", qual a função do verbo?).
-As questões devem ser desafiadoras, mas realistas. Cada questão deve ter 4 opções, sendo apenas uma correta. As opções incorretas devem ser erros conceituais sofisticados e plausíveis. Forneça uma explicação um pouco mais detalhada, mas ainda concisa, que aprofunde o conceito e, se possível, explique brevemente por que as alternativas incorretas são erradas.`;
+            const prompt = `Gere um quiz interativo com ${count} questões sobre o tópico "${topic}". O público-alvo é uma aluna de ensino médio inteligente que busca um desafio real.
+
+**Instruções de Conteúdo:**
+A dificuldade das questões deve ser calibrada entre 6 e 9 (numa escala de 0 a 10). As questões devem simular uma atividade de aula, exigindo raciocínio e aplicação do conhecimento:
+- **Exatas (Matemática, Física):** Devem ser problemas que exijam cálculo para chegar à resposta. A resposta não deve ser óbvia, de maneira que seja fácil de chegar ao seu resultado sem efetuar os cálculos.
+- **Humanas (História, Geografia):** Devem exigir análise de contextos, causas e consequências, não bastando uma simples memorização de datas e nomes.
+- **Biológicas (Biologia, Química):** Devem focar na compreensão de processos e estruturas.
+
+**REGRAS OBRIGATÓRIAS DE QUALIDADE E FORMATAÇÃO:**
+1.  **Aleatoriedade da Resposta Correta:** A posição da resposta correta (A, B, C, D) deve ser totalmente aleatória e distribuída de forma equilibrada ao longo do quiz. Evite concentrar as respostas corretas numa única letra.
+2.  **Variação no Tamanho das Opções:** O comprimento das opções de resposta (corretas e incorretas) deve ser variado. A resposta correta NÃO deve ser consistentemente a mais longa ou a mais curta.
+3.  **Originalidade:** Cada vez que este prompt for usado para o mesmo tópico, formule as perguntas de maneiras diferentes. Aborde diferentes sub-tópicos e use sinônimos para evitar repetições exatas de questões geradas anteriormente.
+4.  **Destaques:** Se uma questão pedir para analisar um "trecho destacado", você DEVE colocar esse trecho entre dois asteriscos duplos (ex: **correu**).
+
+As opções incorretas devem ser erros conceituais sofisticados e plausíveis. A explicação da resposta deve ser detalhada, mas concisa, aprofundando o conceito.`;
             
             const result = await callGeminiAPI(prompt, {
                 quiz: {
@@ -486,3 +495,4 @@ ${resultsText}
     </script>
 </body>
 </html>
+
